@@ -21,25 +21,38 @@
               </v-col>
             </v-row>
             <v-row class="text-center my-4 py-4">
-              <v-col>
+              <v-col v-if="!submitted">
                 <v-btn class="btn btn-primary" @click="submitForm()">
-                  <span>Get Results</span>
+                  <span>Diagnosticar</span>
                 </v-btn>
+              </v-col>
+              <v-col v-else>
+                <v-progress-circular 
+                indeterminate
+                :size="50"
+                color="purple">
+                </v-progress-circular>
               </v-col>
             </v-row> 
         </v-form>
       </v-container>
     </v-card-text>
-    <v-container v-model="submitted">
-      <p class="font-weight-bold">
-        Diagnostico: {{body}}
-      </p>   
+    <v-container class="text-center">
+      <h4>Resultado</h4>
+      <v-card 
+      class="my-4"
+      :color="result===''? 'white' : (result==='0'? 'green':'warning')"> 
+        <v-card-text class="font-weight-bold">
+         {{result===''? '' : (result==='0'? 'Negativo':'Positivo')}}
+        </v-card-text>  
+      </v-card>
+       
     </v-container>
   </v-card>
 </template>
 
 <script>
-  //import axios from 'axios';
+  import axios from 'axios';
   export default {
     data () {
       return {
@@ -47,7 +60,7 @@
         symptoms: ["Tos","Cefalea","Congestion Nasal","Dificultad Respiratoria",
         "Dolor de garganta","Fiebre","Diarrea","Nauseas","Anosmia Hiposmia","Dolor abdominal",
         "Dolor de articulaciones","Dolor Muscular","Dolor de pecho","Otros sintomas"]   ,
-        result: [],
+        result: "",
         submitted: false,
         body: [],     
       }
@@ -66,17 +79,18 @@
       submitForm(){
         this.submitted = true;
         this.compareResults(); 
-        this.body = {input: this.body};
-        /*axios.post('http://localhost:8083/predict-covid',this.body)
+        this.body = {inputs: this.body};
+        axios.post('http://localhost:8180/predict',this.body)
         .then((res) =>{
-          this.result.push(res);
+          console.log(res);
+          this.result = res.data['output'];
         })
         .catch((error) => {
-          this.result.push(error);
+          this.result = error;
         })
         .finally(() =>{
-          this.submitted = true;
-        })*/
+          this.submitted = false;
+        })
       }
     }
   }

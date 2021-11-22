@@ -49,7 +49,7 @@ export default {
        drawer: true,
        links: [
            {icon: 'dashboard', text: 'Dashboard', route: '/'},
-           {icon: 'folder', text: 'Placeholder', route: '/projects'},
+           {icon: 'folder', text: 'Files', route: '/projects'},
            {icon: 'mdi-heart-pulse', text: 'Diagnose', route: '/diagnose'}
        ]
    })
