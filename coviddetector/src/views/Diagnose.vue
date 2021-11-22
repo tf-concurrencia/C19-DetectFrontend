@@ -41,9 +41,9 @@
       <h4>Resultado</h4>
       <v-card 
       class="my-4"
-      :color="result===''? 'white' : (result===0? 'green':'warning')">
+      :color="result===''? 'white' : (result==='0'? 'green':'warning')"> 
         <v-card-text class="font-weight-bold">
-         {{body}} => {{result}}
+         {{result===''? '' : (result==='0'? 'Negativo':'Positivo')}}
         </v-card-text>  
       </v-card>
        
@@ -79,10 +79,11 @@
       submitForm(){
         this.submitted = true;
         this.compareResults(); 
-        this.body = {input: this.body};
-        axios.post('http://localhost:8084/predict',this.body)
+        this.body = {inputs: this.body};
+        axios.post('http://localhost:8180/predict',this.body)
         .then((res) =>{
-          this.result = res.rpta;
+          console.log(res);
+          this.result = res.data['output'];
         })
         .catch((error) => {
           this.result = error;
